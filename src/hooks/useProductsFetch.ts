@@ -104,7 +104,7 @@ export function useProductsFetch(
       isMounted = false;
       abortController.abort();
     };
-  }, [query, category, sortBy, order, page, limit, trigger]);
+  }, [query, category, sortBy, order, page, limit, trigger, addedProducts, deletedProductIds, editedProducts]);
 
   const retry = () => setTrigger(prev => prev + 1);
 

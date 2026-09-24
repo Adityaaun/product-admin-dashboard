@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Product } from '@/types/product';
 import { addProduct, updateProduct } from '@/api/products';
@@ -84,7 +84,7 @@ export default function ProductForm({ initialData, isEdit = false }: ProductForm
           router.push(`/products`);
         }, 1500);
       }
-    } catch (err) {
+    } catch {
       setApiError('Failed to save product. Please try again.');
     } finally {
       setIsSubmitting(false);

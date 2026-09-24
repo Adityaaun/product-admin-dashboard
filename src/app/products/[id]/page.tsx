@@ -74,7 +74,7 @@ export default function ProductDetailPage() {
       setTimeout(() => {
         router.push('/products');
       }, 150);
-    } catch (err) {
+    } catch {
       setDeleteError('Failed to delete product. Please try again.');
     } finally {
       setIsDeleting(false);

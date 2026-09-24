@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { getProductById } from '@/api/products';
 import { Product } from '@/types/product';
 import ProductForm from '@/components/products/ProductForm';
