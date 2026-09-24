@@ -11,6 +11,7 @@ export default function SearchBar() {
   const initialQuery = searchParams.get('q') || '';
   const [inputValue, setInputValue] = useState(initialQuery);
   const isInitialMount = useRef(true);
+  const lastPushedQuery = useRef(initialQuery);
   
   // 1. Typing -> 2. Debounce
   const debouncedValue = useDebounce(inputValue, 500);
@@ -18,13 +19,14 @@ export default function SearchBar() {
   // Sync state if URL changes externally (like clicking clear, category change, or back button)
   useEffect(() => {
     const currentQuery = searchParams.get('q') || '';
-    // If the URL query differs from our debounced value, it means the URL was changed
+    // If the URL query differs from what we last pushed, it means the URL was changed
     // from outside the search bar (e.g., category filter, back button).
     // We should sync our local input to match the URL.
-    if (currentQuery !== debouncedValue) {
+    if (currentQuery !== lastPushedQuery.current) {
       setInputValue(currentQuery);
+      lastPushedQuery.current = currentQuery;
     }
-  }, [searchParams, debouncedValue]);
+  }, [searchParams]);
 
   // 3. Update URL
   useEffect(() => {
@@ -46,6 +48,7 @@ export default function SearchBar() {
       // Reset to page 1
       params.set('page', '1');
       
+      lastPushedQuery.current = debouncedValue;
       router.push(`?${params.toString()}`);
     }
   }, [debouncedValue, router, searchParams]);
