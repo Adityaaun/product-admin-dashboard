@@ -15,14 +15,16 @@ export default function SearchBar() {
   // 1. Typing -> 2. Debounce
   const debouncedValue = useDebounce(inputValue, 500);
 
-  // Sync state if URL changes externally
+  // Sync state if URL changes externally (like clicking clear, category change, or back button)
   useEffect(() => {
     const currentQuery = searchParams.get('q') || '';
-    if (currentQuery !== inputValue) {
-      const timer = setTimeout(() => setInputValue(currentQuery), 0);
-      return () => clearTimeout(timer);
+    // If the URL query differs from our debounced value, it means the URL was changed
+    // from outside the search bar (e.g., category filter, back button).
+    // We should sync our local input to match the URL.
+    if (currentQuery !== debouncedValue) {
+      setInputValue(currentQuery);
     }
-  }, [searchParams, inputValue]);
+  }, [searchParams, debouncedValue]);
 
   // 3. Update URL
   useEffect(() => {
