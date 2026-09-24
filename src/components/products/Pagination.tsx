@@ -48,7 +48,7 @@ export default function Pagination({ total, limit, page }: PaginationProps) {
           <select
             value={limit}
             onChange={handleLimitChange}
-            className="block w-24 rounded-lg border-0 py-1.5 pl-3 pr-8 text-slate-900 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 bg-slate-50 hover:bg-white cursor-pointer"
+            className="block w-28 rounded-lg border-0 py-1.5 pl-3 pr-8 text-slate-900 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 bg-slate-50 hover:bg-white cursor-pointer"
           >
             <option value={10}>10 / page</option>
             <option value={20}>20 / page</option>
