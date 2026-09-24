@@ -15,22 +15,22 @@ export interface Product {
   discountPercentage: number;
   rating: number;
   stock: number;
-  tags: string[];
-  brand: string;
-  sku: string;
-  weight: number;
-  dimensions: {
+  tags?: string[];
+  brand?: string;
+  sku?: string;
+  weight?: number;
+  dimensions?: {
     width: number;
     height: number;
     depth: number;
   };
-  warrantyInformation: string;
-  shippingInformation: string;
-  availabilityStatus: string;
-  reviews: ProductReview[];
-  returnPolicy: string;
-  minimumOrderQuantity: number;
-  meta: {
+  warrantyInformation?: string;
+  shippingInformation?: string;
+  availabilityStatus?: string;
+  reviews?: ProductReview[];
+  returnPolicy?: string;
+  minimumOrderQuantity?: number;
+  meta?: {
     createdAt: string;
     updatedAt: string;
     barcode: string;
