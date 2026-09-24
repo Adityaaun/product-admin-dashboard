@@ -152,11 +152,11 @@ export default function ProductDetailPage() {
           <div className="p-6 bg-gray-50 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-gray-200">
             <div className="w-full h-64 sm:h-80 bg-white rounded-lg flex items-center justify-center mb-4 overflow-hidden border border-gray-200 p-2">
                {/* eslint-disable-next-line @next/next/no-img-element */}
-               <img src={product.images[0] || product.thumbnail} alt={product.title} className="max-h-full object-contain" />
+               <img src={product.images?.[0] || product.thumbnail || ''} alt={product.title} className="max-h-full object-contain" />
             </div>
-            {product.images.length > 1 && (
+            {(product.images?.length || 0) > 1 && (
               <div className="flex space-x-2 overflow-x-auto w-full py-2">
-                {product.images.map((img, idx) => (
+                {product.images?.map((img, idx) => (
                   <div key={idx} className="h-16 w-16 flex-shrink-0 bg-white border border-gray-200 rounded overflow-hidden p-1">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={img} alt={`${product.title} preview ${idx}`} className="h-full w-full object-contain" />
