@@ -47,7 +47,7 @@ export default function CategoryFilter() {
       onChange={handleChange}
       disabled={!!currentQuery}
       title={currentQuery ? "Clear search to filter by category" : "Filter by category"}
-      className="block w-full sm:w-48 rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-blue-600 sm:text-sm sm:leading-6 disabled:opacity-50 disabled:bg-gray-100"
+      className="block w-full sm:w-48 rounded-xl border-0 py-2.5 pl-4 pr-10 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 transition-all bg-slate-50 hover:bg-white focus:bg-white disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
     >
       <option value="">All Categories</option>
       {categories.map((cat) => (

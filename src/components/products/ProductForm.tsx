@@ -92,17 +92,17 @@ export default function ProductForm({ initialData, isEdit = false }: ProductForm
   };
 
   return (
-    <div className="bg-white shadow sm:rounded-lg p-6 max-w-2xl mx-auto">
+    <div className="bg-white shadow-sm border border-slate-200 sm:rounded-2xl p-6 md:p-8 max-w-2xl mx-auto">
       {success && (
-        <div className="mb-4 rounded-md bg-green-50 p-4">
+        <div className="mb-6 rounded-xl bg-emerald-50 p-4 border border-emerald-100 shadow-sm">
           <div className="flex">
             <div className="flex-shrink-0">
-              <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+              <svg className="h-5 w-5 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
               </svg>
             </div>
             <div className="ml-3">
-              <p className="text-sm font-medium text-green-800">
+              <p className="text-sm font-semibold text-emerald-800">
                 Product successfully {isEdit ? 'updated' : 'created'}! Redirecting...
               </p>
             </div>
@@ -111,14 +111,19 @@ export default function ProductForm({ initialData, isEdit = false }: ProductForm
       )}
 
       {apiError && (
-        <div className="mb-4 rounded-md bg-red-50 p-4">
-          <p className="text-sm font-medium text-red-800">{apiError}</p>
+        <div className="mb-6 rounded-xl bg-red-50 p-4 border border-red-100 shadow-sm">
+          <div className="flex items-center gap-3">
+            <svg className="h-5 w-5 text-red-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p className="text-sm font-medium text-red-800">{apiError}</p>
+          </div>
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="title" className="block text-sm font-medium leading-6 text-gray-900">
+          <label htmlFor="title" className="block text-sm font-medium leading-6 text-slate-700">
             Title <span className="text-red-500">*</span>
           </label>
           <div className="mt-2">
@@ -127,14 +132,14 @@ export default function ProductForm({ initialData, isEdit = false }: ProductForm
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className={`block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 ${errors.title ? 'ring-red-300 focus:ring-red-500' : 'ring-gray-300 focus:ring-blue-600'}`}
+              className={`block w-full rounded-xl border-0 py-2.5 px-4 text-slate-900 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 transition-all ${errors.title ? 'ring-red-300 focus:ring-red-500 bg-red-50' : 'ring-slate-300 focus:ring-blue-600 bg-slate-50 focus:bg-white'}`}
             />
-            {errors.title && <p className="mt-2 text-sm text-red-600">{errors.title}</p>}
+            {errors.title && <p className="mt-2 text-sm font-medium text-red-600">{errors.title}</p>}
           </div>
         </div>
 
         <div>
-          <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">
+          <label htmlFor="description" className="block text-sm font-medium leading-6 text-slate-700">
             Description <span className="text-red-500">*</span>
           </label>
           <div className="mt-2">
@@ -143,15 +148,15 @@ export default function ProductForm({ initialData, isEdit = false }: ProductForm
               rows={4}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className={`block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 ${errors.description ? 'ring-red-300 focus:ring-red-500' : 'ring-gray-300 focus:ring-blue-600'}`}
+              className={`block w-full rounded-xl border-0 py-2.5 px-4 text-slate-900 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 transition-all ${errors.description ? 'ring-red-300 focus:ring-red-500 bg-red-50' : 'ring-slate-300 focus:ring-blue-600 bg-slate-50 focus:bg-white'}`}
             />
-            {errors.description && <p className="mt-2 text-sm text-red-600">{errors.description}</p>}
+            {errors.description && <p className="mt-2 text-sm font-medium text-red-600">{errors.description}</p>}
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900">
+            <label htmlFor="price" className="block text-sm font-medium leading-6 text-slate-700">
               Price ($) <span className="text-red-500">*</span>
             </label>
             <div className="mt-2">
@@ -161,14 +166,14 @@ export default function ProductForm({ initialData, isEdit = false }: ProductForm
                 id="price"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
-                className={`block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 ${errors.price ? 'ring-red-300 focus:ring-red-500' : 'ring-gray-300 focus:ring-blue-600'}`}
+                className={`block w-full rounded-xl border-0 py-2.5 px-4 text-slate-900 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 transition-all ${errors.price ? 'ring-red-300 focus:ring-red-500 bg-red-50' : 'ring-slate-300 focus:ring-blue-600 bg-slate-50 focus:bg-white'}`}
               />
-              {errors.price && <p className="mt-2 text-sm text-red-600">{errors.price}</p>}
+              {errors.price && <p className="mt-2 text-sm font-medium text-red-600">{errors.price}</p>}
             </div>
           </div>
 
           <div>
-            <label htmlFor="stock" className="block text-sm font-medium leading-6 text-gray-900">
+            <label htmlFor="stock" className="block text-sm font-medium leading-6 text-slate-700">
               Stock <span className="text-red-500">*</span>
             </label>
             <div className="mt-2">
@@ -178,15 +183,15 @@ export default function ProductForm({ initialData, isEdit = false }: ProductForm
                 id="stock"
                 value={stock}
                 onChange={(e) => setStock(e.target.value)}
-                className={`block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 ${errors.stock ? 'ring-red-300 focus:ring-red-500' : 'ring-gray-300 focus:ring-blue-600'}`}
+                className={`block w-full rounded-xl border-0 py-2.5 px-4 text-slate-900 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 transition-all ${errors.stock ? 'ring-red-300 focus:ring-red-500 bg-red-50' : 'ring-slate-300 focus:ring-blue-600 bg-slate-50 focus:bg-white'}`}
               />
-              {errors.stock && <p className="mt-2 text-sm text-red-600">{errors.stock}</p>}
+              {errors.stock && <p className="mt-2 text-sm font-medium text-red-600">{errors.stock}</p>}
             </div>
           </div>
         </div>
 
         <div>
-          <label htmlFor="category" className="block text-sm font-medium leading-6 text-gray-900">
+          <label htmlFor="category" className="block text-sm font-medium leading-6 text-slate-700">
             Category <span className="text-red-500">*</span>
           </label>
           <div className="mt-2">
@@ -195,25 +200,35 @@ export default function ProductForm({ initialData, isEdit = false }: ProductForm
               id="category"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className={`block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 ${errors.category ? 'ring-red-300 focus:ring-red-500' : 'ring-gray-300 focus:ring-blue-600'}`}
+              className={`block w-full rounded-xl border-0 py-2.5 px-4 text-slate-900 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 transition-all ${errors.category ? 'ring-red-300 focus:ring-red-500 bg-red-50' : 'ring-slate-300 focus:ring-blue-600 bg-slate-50 focus:bg-white'}`}
             />
-            {errors.category && <p className="mt-2 text-sm text-red-600">{errors.category}</p>}
+            {errors.category && <p className="mt-2 text-sm font-medium text-red-600">{errors.category}</p>}
           </div>
         </div>
 
-        <div className="mt-6 flex items-center justify-end gap-x-4 border-t border-gray-200 pt-6">
+        <div className="mt-8 flex items-center justify-end gap-x-4 border-t border-slate-200 pt-6">
           <Link
             href={isEdit ? `/products/${initialData?.id}` : '/products'}
-            className="text-sm font-semibold leading-6 text-gray-900 hover:text-gray-700"
+            className="text-sm font-semibold leading-6 text-slate-600 hover:text-slate-900 transition-colors"
           >
             Cancel
           </Link>
           <button
             type="submit"
             disabled={isSubmitting || success}
-            className="inline-flex justify-center rounded-md bg-blue-600 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50 flex-shrink-0"
+            className="inline-flex justify-center items-center rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm shadow-blue-600/20 hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-70 disabled:cursor-not-allowed flex-shrink-0 transition-all"
           >
-            {isSubmitting ? 'Saving...' : 'Save Product'}
+            {isSubmitting ? (
+              <span className="flex items-center gap-2">
+                <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Saving...
+              </span>
+            ) : (
+              'Save Product'
+            )}
           </button>
         </div>
       </form>
