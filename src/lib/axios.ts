@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getAccessToken, clearAccessToken } from './auth';
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'https://dummyjson.com',
@@ -9,7 +10,10 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    // Authentication token attachment will go here
+    const token = getAccessToken();
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => {
@@ -22,7 +26,12 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    // Centralized response error handling will go here
+    if (error.response && error.response.status === 401) {
+      clearAccessToken();
+      if (typeof window !== 'undefined') {
+        window.location.replace('/login');
+      }
+    }
     return Promise.reject(error);
   }
 );
