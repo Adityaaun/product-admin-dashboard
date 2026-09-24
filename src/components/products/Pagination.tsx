@@ -13,8 +13,9 @@ export default function Pagination({ total, limit, page }: PaginationProps) {
   const searchParams = useSearchParams();
 
   const totalPages = Math.ceil(total / limit) || 1;
-  const startItem = (page - 1) * limit + 1;
-  const endItem = Math.min(page * limit, total);
+  const safePage = Math.min(page, totalPages);
+  const startItem = total === 0 ? 0 : (safePage - 1) * limit + 1;
+  const endItem = Math.min(safePage * limit, total);
 
   const updateUrl = (newPage: number, newLimit: number) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -58,8 +59,8 @@ export default function Pagination({ total, limit, page }: PaginationProps) {
         <div>
           <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
             <button
-              onClick={() => handlePageChange(page - 1)}
-              disabled={page === 1}
+              onClick={() => handlePageChange(safePage - 1)}
+              disabled={safePage === 1}
               className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50"
             >
               <span className="sr-only">Previous</span>
@@ -68,11 +69,11 @@ export default function Pagination({ total, limit, page }: PaginationProps) {
               </svg>
             </button>
             <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300 focus:outline-offset-0">
-              {page} / {totalPages}
+              {safePage} / {totalPages}
             </span>
             <button
-              onClick={() => handlePageChange(page + 1)}
-              disabled={page === totalPages || total === 0}
+              onClick={() => handlePageChange(safePage + 1)}
+              disabled={safePage === totalPages || total === 0}
               className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50"
             >
               <span className="sr-only">Next</span>
