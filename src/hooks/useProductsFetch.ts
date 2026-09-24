@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { getProducts, searchProducts, getProductsByCategory } from '@/api/products';
 import { Product } from '@/types/product';
 import axios from 'axios';
+import { useProductMutations } from '@/context/ProductMutationsContext';
 
 interface UseProductsResult {
   products: Product[];
@@ -19,6 +20,7 @@ export function useProductsFetch(
   page: number,
   limit: number
 ): UseProductsResult {
+  const { addedProducts, editedProducts, deletedProductIds } = useProductMutations();
   const [products, setProducts] = useState<Product[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -57,9 +59,31 @@ export function useProductsFetch(
 
         // 6. Verify request identity
         if (isMounted && currentRequestId === requestIdRef.current) {
+          // Apply session mutations
+          let finalProducts = response.products.filter((p: Product) => !deletedProductIds[String(p.id)]);
+          
+          finalProducts = finalProducts.map((p: Product) => {
+            const edited = editedProducts[String(p.id)];
+            return edited ? { ...p, ...edited } : p;
+          });
+
+          if (page === 1 && !query && !category) {
+            finalProducts = [...addedProducts, ...finalProducts];
+          }
+
           // 7. Render only latest result
-          setProducts(response.products);
-          setTotal(response.total);
+          setProducts(finalProducts);
+          
+          // Adjust total to account for deletions so pagination boundaries remain valid
+          // A rough adjustment works for the current session
+          let adjustedTotal = response.total;
+          if (!query && !category) {
+             adjustedTotal += addedProducts.length;
+             // Try to count how many deleted items might be in the current total
+             // For simplicity, we just subtract the size of deleted items if we assume they were part of the total
+             adjustedTotal -= Object.keys(deletedProductIds).length;
+          }
+          setTotal(Math.max(0, adjustedTotal));
         }
       } catch (err) {
         if (axios.isCancel(err)) {

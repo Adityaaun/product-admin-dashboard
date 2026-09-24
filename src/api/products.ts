@@ -41,7 +41,7 @@ export const getProductsByCategory = async (
   return response.data;
 };
 
-export const getProductById = async (id: number | string): Promise<Product> => {
+export const getProductById = async (id: string | number): Promise<Product> => {
   const response = await api.get<Product>(`/products/${id}`);
   return response.data;
 };
@@ -51,12 +51,14 @@ export const addProduct = async (productData: Partial<Product>): Promise<Product
   return response.data;
 };
 
-export const updateProduct = async (id: number | string, productData: Partial<Product>): Promise<Product> => {
+export const updateProduct = async (id: string | number, productData: Partial<Product>): Promise<Product> => {
   const response = await api.put<Product>(`/products/${id}`, productData);
   return response.data;
 };
 
-export const deleteProduct = async (id: number | string): Promise<Product> => {
-  const response = await api.delete<Product>(`/products/${id}`);
+export const deleteProduct = async (id: string | number): Promise<{ isDeleted: boolean; deletedOn: string } & Product> => {
+  const response = await api.delete<{ isDeleted: boolean; deletedOn: string } & Product>(`/products/${id}`);
   return response.data;
 };
+
+

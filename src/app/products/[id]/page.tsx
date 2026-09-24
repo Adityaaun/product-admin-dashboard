@@ -1,27 +1,51 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
-import { getProductById } from '@/api/products';
+import { useParams, useRouter } from 'next/navigation';
+import { getProductById, deleteProduct } from '@/api/products';
 import { Product } from '@/types/product';
 import Link from 'next/link';
 import axios from 'axios';
+import ConfirmModal from '@/components/ui/ConfirmModal';
+import { useProductMutations } from '@/context/ProductMutationsContext';
 
 export default function ProductDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const id = params.id as string;
+
+  const { editedProducts, deletedProductIds, addedProducts, deleteLocalProduct } = useProductMutations();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
       setError(null);
+      
+      if (deletedProductIds[id]) {
+        setError('NOT_FOUND');
+        setLoading(false);
+        return;
+      }
+      
+      const addedProduct = addedProducts.find(p => String(p.id) === id);
+      if (addedProduct) {
+        setProduct(editedProducts[id] ? { ...addedProduct, ...editedProducts[id] } : addedProduct);
+        setLoading(false);
+        return;
+      }
+
       try {
         const data = await getProductById(id);
-        setProduct(data);
+        const finalData = editedProducts[id] ? { ...data, ...editedProducts[id] } : data;
+        setProduct(finalData);
       } catch (err: unknown) {
         if (axios.isAxiosError(err) && err.response?.status === 404) {
           setError('NOT_FOUND');
@@ -36,7 +60,26 @@ export default function ProductDetailPage() {
     if (id) {
       fetchProduct();
     }
-  }, [id]);
+  }, [id, editedProducts, deletedProductIds, addedProducts]);
+
+  const handleDelete = async () => {
+    if (isDeleting) return; // duplicate request protection
+    setIsDeleting(true);
+    setDeleteError(null);
+    try {
+      await deleteProduct(id);
+      deleteLocalProduct(id);
+      setIsDeleteModalOpen(false);
+      // Let the modal close smoothly before navigating away
+      setTimeout(() => {
+        router.push('/products');
+      }, 150);
+    } catch (err) {
+      setDeleteError('Failed to delete product. Please try again.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -89,12 +132,19 @@ export default function ProductDetailPage() {
             Edit
           </Link>
           <button
+            onClick={() => setIsDeleteModalOpen(true)}
             className="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500"
           >
             Delete
           </button>
         </div>
       </div>
+
+      {deleteError && (
+        <div className="rounded-md bg-red-50 p-4 shadow-sm border border-red-200">
+          <p className="text-sm font-medium text-red-800">{deleteError}</p>
+        </div>
+      )}
 
       <div className="bg-white shadow rounded-lg overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-2">
@@ -201,6 +251,16 @@ export default function ProductDetailPage() {
           </ul>
         </div>
       )}
+
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        title="Delete Product"
+        description={`Are you sure you want to delete "${product.title}"? This action cannot be undone.`}
+        confirmText="Delete"
+        onConfirm={handleDelete}
+        onCancel={() => setIsDeleteModalOpen(false)}
+        isConfirming={isDeleting}
+      />
     </div>
   );
 }
